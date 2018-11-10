@@ -9,8 +9,8 @@ extern "C" {
         return (void*) new QuBit();
     }
     #define SV2Q(sv,q) \
-        QuBit* q = (QuBit* q) sv; \
-        assert(QuBit::all.contains(q));
+        QuBit* q = (QuBit*) sv; \
+        assert(QuBit::all.find(q) != QuBit::all.end());
     
     int reset_qubit(void*  q_sv) {
         SV2Q(q_sv,q);
@@ -42,6 +42,7 @@ extern "C" {
     int ccH   (void* c1_sv, void* c0_sv, void* t_sv) { SV2Q(c0_sv,c0); SV2Q(c1_sv,c1); SV2Q(t_sv,t); apply_quop(c_op(H_op, 2),    {c1, c0, t}); return 1; }
     int ccSwap(void* c1_sv, void* c0_sv, void* t_sv) { SV2Q(c0_sv,c0); SV2Q(c1_sv,c1); SV2Q(t_sv,t); apply_quop(c_op(Swap_op, 2), {c1, c0, t}); return 1; }
     
+    svBit Measure(void* q_sv) { SV2Q(q_sv,q); return (svBit) q->measure(); }
     
 #ifdef __cplusplus
 }

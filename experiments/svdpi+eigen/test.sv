@@ -27,5 +27,32 @@ module test();
     import "DPI-C" context function int ccH   (qubit c1, qubit c0, qubit t);
     import "DPI-C" context function int ccSwap(qubit c1, qubit c0, qubit t);
     
+    import "DPI-C" context function bit Measure(qubit q);
+    
+    // qubit teleportation example:
+    qubit t;
+    qubit a;
+    qubit b;
+    
+    initial begin
+        bit   x_control;
+        bit   z_control;
+        
+        t = new_qubit();
+        a = new_qubit();
+        b = new_qubit();
+        
+         H(a);
+        cX(a, b);
+        cX(t, a);
+         H(t);
+        x_control = Measure(a);
+        z_control = Measure(t);
+        
+        if (x_control) X(b);
+        if (z_control) Z(b);
+        
+    end
+    
     
 endmodule : test
